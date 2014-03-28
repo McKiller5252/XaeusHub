@@ -1,0 +1,6 @@
+name: XaeusHub
+main: me.McKiller5252.xaeushub.XaeusHub
+version: 1.0
+description: heuheuieiiwie
+author: McKiller5252
+depend: [BarAPI]
