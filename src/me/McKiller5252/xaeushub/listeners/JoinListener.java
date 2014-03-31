@@ -1,15 +1,17 @@
-package me.McKiller5252.xaeushub;
+package me.McKiller5252.xaeushub.listeners;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import me.McKiller5252.xaeushub.XaeusHub;
 import me.confuser.barapi.BarAPI;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -33,12 +35,11 @@ public class JoinListener implements Listener {
 		});
 		
 	}
-	@EventHandler
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onJoin(PlayerJoinEvent e){
 		Player p = e.getPlayer();
 		showBarChanging(p);
-		
-	   plugin.getXaeusBoard().addPlayer(p);
+	   plugin.sb.updatescoreboardforeveryone();
 	}
 	
 	public void showBarChanging(final Player p){
@@ -58,9 +59,9 @@ public class JoinListener implements Listener {
 			}, 0L, 100L);
 		}
 	
-	@EventHandler
+	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		plugin.getXaeusBoard().removePlayer(event.getPlayer());
+		plugin.sb.updatescoreboardforeveryone();
 	}
 
 }
