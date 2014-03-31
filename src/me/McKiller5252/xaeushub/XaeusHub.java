@@ -6,14 +6,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class XaeusHub extends JavaPlugin implements Listener{
 	
-	public static XaeusHub plugin;
-	
+	public XaeusHub plugin;
 	private XaeusBoard sb;
 	
 	public void onEnable(){
 		plugin = this;
 		sb = new XaeusBoard(this);
-		
 		registerdEvents();
 		
 	}

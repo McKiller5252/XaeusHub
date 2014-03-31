@@ -19,6 +19,7 @@ public class JoinListener implements Listener {
 	XaeusHub plugin;
 	
 	public ChatColor y = ChatColor.YELLOW;
+	public ChatColor g = ChatColor.GOLD;
 	
 	public JoinListener(XaeusHub i) {
 		plugin = i;
@@ -47,9 +48,9 @@ public class JoinListener implements Listener {
 			{
 			    Random random = new Random();
 				List<String> list = new ArrayList<String>();
-				list.add(y + "Welcome to the Xaeus Network!");
+				list.add(y + "Welcome " + g + p.getName() + y + " to the Xaeus Network!");
 				list.add(y + "Want to support the server? - store.xaeus.net");
-				list.add(y + "Want to check out our website? - www.xaeus.net");
+				list.add(y + "Check out our website! - www.xaeus.net");
 				
 				 String message = (String)list.get(random.nextInt(list.size()));
 			     BarAPI.setMessage(p, message);
