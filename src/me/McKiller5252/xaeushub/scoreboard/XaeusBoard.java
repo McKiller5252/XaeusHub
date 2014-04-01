@@ -1,6 +1,7 @@
 package me.McKiller5252.xaeushub.scoreboard;
 
 import me.McKiller5252.xaeushub.XaeusHub;
+import me.McKiller5252.xaeushub.tokens.Tokens;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -17,6 +18,7 @@ public class XaeusBoard {
 	public ChatColor line = ChatColor.STRIKETHROUGH;
 	public ChatColor r = ChatColor.RED;
 	public ChatColor b = ChatColor.BOLD;
+	public ChatColor bl = ChatColor.BLACK;
 	public ChatColor c = ChatColor.DARK_AQUA;
 	public ChatColor aq = ChatColor.LIGHT_PURPLE;
 	public String prefix = r + "" + line + "---" + g + "XaeusNetwork" + r + "" + line + "---";
@@ -31,14 +33,19 @@ public class XaeusBoard {
 		o.setDisplaySlot(DisplaySlot.SIDEBAR);
 		o.setDisplayName(prefix);
 		
-		int a = Bukkit.getServer().getOnlinePlayers().length;
+		int online  = Bukkit.getServer().getOnlinePlayers().length;
+		int tokens  = Tokens.getManager().getTokens(p.getName());
 		
-		o.getScore(Bukkit.getOfflinePlayer(g + b.toString() + "Online:")).setScore(5);
-		o.getScore(Bukkit.getOfflinePlayer(y + "" + a)).setScore(4);
-		o.getScore(Bukkit.getOfflinePlayer("")).setScore(3);
+		o.getScore(Bukkit.getOfflinePlayer(g + b.toString() + "Online:")).setScore(8);
+		o.getScore(Bukkit.getOfflinePlayer(y.toString() + online)).setScore(7);
+		o.getScore(Bukkit.getOfflinePlayer("")).setScore(6);
+		o.getScore(Bukkit.getOfflinePlayer(g + b.toString() + "Tokens:")).setScore(5);
+		o.getScore(Bukkit.getOfflinePlayer(y.toString() + tokens)).setScore(4);
+		o.getScore(Bukkit.getOfflinePlayer(" ")).setScore(3);
 		o.getScore(Bukkit.getOfflinePlayer(g + b.toString() + "Website:")).setScore(2);
 		o.getScore(Bukkit.getOfflinePlayer(y + "xaeus.net")).setScore(1);
-		o.getScore(Bukkit.getOfflinePlayer(r.toString() + line.toString() + "------------")).setScore(0);
+		
+		
 		p.setScoreboard(board);
 	}
 
