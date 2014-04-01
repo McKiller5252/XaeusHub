@@ -21,7 +21,7 @@ public class Tokens {
 		if (map.containsKey(name)) {
             return map.get(name);
         } else {
-            return 0;
+            return 10;
         }
 	}
 	 public void addTokens(String name, int amount_to_add) {

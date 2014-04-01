@@ -11,7 +11,10 @@ import org.bukkit.event.player.*;
 public class PlayerListener implements Listener {
 	
 	XaeusHub plugin;
+	
 	int reward = 1;
+	int penalty = 5;
+	
 	public PlayerListener(XaeusHub i) {
 		plugin = i;
 	}
@@ -22,16 +25,20 @@ public class PlayerListener implements Listener {
 		plugin.bar.showBarChanging(e.getPlayer());
 		plugin.sb.updatescoreboardforeveryone();
 		Tokens.getManager().addTokens(p.getName(), reward);
+		XaeusHub.getPlugin().reloadConfig();
+		XaeusHub.getPlugin().saveConfig();
 	}
 	
 	@EventHandler (priority = EventPriority.HIGHEST)
-	public void onPlayerQuit(PlayerQuitEvent event) {
+	public void onPlayerQuit(PlayerQuitEvent e) {
 		plugin.sb.updatescoreboardforeveryone();
 	}
 	
 	@EventHandler (priority = EventPriority.HIGHEST)
-	public void onPlayerKick(PlayerKickEvent event){
+	public void onPlayerKick(PlayerKickEvent e){
+		Player p = e.getPlayer();
 		plugin.sb.updatescoreboardforeveryone();
+		Tokens.getManager().removeTokens(p.getName(), penalty);
 	}
 
 }
