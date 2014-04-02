@@ -21,7 +21,7 @@ public class Tokens {
 		if (map.containsKey(name)) {
             return map.get(name);
         } else {
-            return 10;
+            return 0;
         }
 	}
 	 public void addTokens(String name, int amount_to_add) {
@@ -51,16 +51,14 @@ public class Tokens {
         }
 		System.out.print("[XaeusHub] Loaded Tokens Configuration File!");
 	}
-	public void saveConfig(){
-		XaeusHub.getPlugin().saveConfig();
-    }
 
     public void startSaveTask(){
         new BukkitRunnable(){
             public void run(){
             	XaeusHub.getPlugin().saveConfig();
+            	XaeusHub.getBoard().updatescoreboardforeveryone();
             }
-        }.runTaskTimer(XaeusHub.getPlugin(), 20*2, 20*60);
+        }.runTaskTimer(XaeusHub.getPlugin(), 20*5, 20);
     }
 
 

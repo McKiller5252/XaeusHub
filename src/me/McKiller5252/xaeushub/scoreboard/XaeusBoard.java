@@ -44,8 +44,6 @@ public class XaeusBoard {
 		o.getScore(Bukkit.getOfflinePlayer(" ")).setScore(3);
 		o.getScore(Bukkit.getOfflinePlayer(g + b.toString() + "Website:")).setScore(2);
 		o.getScore(Bukkit.getOfflinePlayer(y + "xaeus.net")).setScore(1);
-		
-		
 		p.setScoreboard(board);
 	}
 

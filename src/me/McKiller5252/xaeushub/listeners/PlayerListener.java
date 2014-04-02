@@ -6,39 +6,32 @@ import me.McKiller5252.xaeushub.tokens.Tokens;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.player.*;
+import org.bukkit.event.weather.WeatherChangeEvent;
 
 
 public class PlayerListener implements Listener {
 	
-	XaeusHub plugin;
-	
-	int reward = 1;
-	int penalty = 5;
-	
-	public PlayerListener(XaeusHub i) {
-		plugin = i;
-	}
-	
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onJoin(PlayerJoinEvent e){
 		Player p = e.getPlayer();
-		plugin.bar.showBarChanging(e.getPlayer());
-		plugin.sb.updatescoreboardforeveryone();
+		XaeusHub.getBar().showBarChanging(e.getPlayer());
+		XaeusHub.getBoard().updatescoreboardforeveryone();
+		int reward = 1;
 		Tokens.getManager().addTokens(p.getName(), reward);
-		XaeusHub.getPlugin().reloadConfig();
-		XaeusHub.getPlugin().saveConfig();
 	}
 	
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onPlayerQuit(PlayerQuitEvent e) {
-		plugin.sb.updatescoreboardforeveryone();
+		 XaeusHub.getBoard().updatescoreboardforeveryone();
 	}
 	
 	@EventHandler (priority = EventPriority.HIGHEST)
 	public void onPlayerKick(PlayerKickEvent e){
-		Player p = e.getPlayer();
-		plugin.sb.updatescoreboardforeveryone();
-		Tokens.getManager().removeTokens(p.getName(), penalty);
+	   XaeusHub.getBoard().updatescoreboardforeveryone();
+	}
+	@EventHandler (priority = EventPriority.NORMAL)
+	public void onRainStart(WeatherChangeEvent event) {
+		event.setCancelled(true);
 	}
 
 }

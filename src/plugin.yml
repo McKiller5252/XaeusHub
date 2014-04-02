@@ -4,3 +4,6 @@ version: 1.0
 description: heuheuieiiwie
 author: McKiller5252
 depend: [BarAPI]
+commands:
+   tokens:
+      description: Give player tokens
