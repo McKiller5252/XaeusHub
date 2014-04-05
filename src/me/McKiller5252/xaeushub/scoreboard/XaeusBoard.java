@@ -27,6 +27,7 @@ public class XaeusBoard {
 		plugin = i;
 	}	
 
+	@SuppressWarnings("deprecation")
 	public void addPlayer(Player p) {
 		Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
 		Objective o = board.registerNewObjective("XaeusHub", "dummy");

@@ -23,7 +23,9 @@ public class Tokens {
         } else {
             return 0;
         }
-	}
+		
+	 }
+	 
 	 public void addTokens(String name, int amount_to_add) {
 	        if (map.containsKey(name)) {
 	            map.put(name, map.get(name) + amount_to_add);
@@ -32,7 +34,14 @@ public class Tokens {
 	            map.put(name, amount_to_add);
 	            XaeusHub.getPlugin().getConfig().set(name, getTokens(name));
 	        }
-	 } 
+	      
+	 }
+	 
+	 public void setTokens(String name, int amount) {
+		 map.put(name,  amount);
+		 XaeusHub.getPlugin().getConfig().set(name, getTokens(name));
+		 
+	} 
 	 
 	 public boolean hasTokens(String name) {
         return map.containsKey(name);
@@ -41,6 +50,7 @@ public class Tokens {
     public void removeTokens(String name, int cost) {
         map.put(name, getTokens(name) - cost);
         XaeusHub.getPlugin().getConfig().set(name, getTokens(name));
+        
     }
     
 	 
@@ -60,6 +70,7 @@ public class Tokens {
             }
         }.runTaskTimer(XaeusHub.getPlugin(), 20*5, 20);
     }
+	
 
 
 
