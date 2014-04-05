@@ -26,7 +26,13 @@ public class XaeusShopGui implements Listener{
 	
 	 int Miner = 100;
 	 int Cob = 1000;
-	 int Remove = 0;
+	 int Nature = 150;
+	 int Space = 250;
+	 int Beach = 350;
+	 int Explosion = 750;
+	 int Treasure = 1000;
+	 int Handy = 550;
+	 int Pumpkin = 750;
 	
 	public XaeusShopGui(Plugin m){
 		hat = Bukkit.getServer().createInventory(null, 27, ChatColor.YELLOW + "Xaeus Hat Shop");
@@ -41,7 +47,7 @@ public class XaeusShopGui implements Listener{
 		
 		
 		//Clear Hat
-		z = createItem(Material.WOOL, ChatColor.GOLD + "Click to remove your Hat!", Remove);
+		z = createRemove(Material.WOOL, ChatColor.GOLD + "Click to remove your Hat!");
 		hat.setItem(22, z);
 		
 		
@@ -53,6 +59,14 @@ public class XaeusShopGui implements Listener{
 		ItemMeta im = i.getItemMeta();
 		im.setDisplayName(name);
 		im.setLore(Arrays.asList("§7Cost: §6" + cost));
+		i.setItemMeta(im);
+		return i;
+	}
+	
+	private ItemStack createRemove(Material dc, String name){
+		ItemStack i = new ItemStack(dc);
+		ItemMeta im = i.getItemMeta();
+		im.setDisplayName(name);
 		i.setItemMeta(im);
 		return i;
 	}
@@ -80,7 +94,11 @@ public class XaeusShopGui implements Listener{
 			p.closeInventory();
 		}
 		if(e.getCurrentItem().getItemMeta().getDisplayName().contains("Click to remove your Hat!")){
-			p.getInventory().setHelmet(null);
+			if(p.getInventory().getHelmet() != null){
+				p.getInventory().setHelmet(null);
+			}else{
+			p.sendMessage(ChatColor.GREEN + "You don't have a hat on to remove!");
+			}
 			p.closeInventory();
 		}
 		}
