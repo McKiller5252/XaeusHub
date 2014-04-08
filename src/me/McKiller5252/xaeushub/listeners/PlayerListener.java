@@ -1,12 +1,10 @@
 package me.McKiller5252.xaeushub.listeners;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import me.McKiller5252.xaeushub.XaeusHub;
 import me.McKiller5252.xaeushub.tokens.Tokens;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,14 +13,10 @@ import org.bukkit.event.player.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
-
 
 public class PlayerListener implements Listener {
 	
-	ArrayList<Player> cooldown = new ArrayList<Player>();
-	
-	int reward = 5;
+	int reward = 2;
 	
 	@EventHandler 
 	public void onJoin(PlayerJoinEvent e){
@@ -30,28 +24,7 @@ public class PlayerListener implements Listener {
 		XaeusHub.getBar().showBarChanging(e.getPlayer());
 		XaeusHub.getBoard().updatescoreboardforeveryone();
 		hatshopItem(p);
-		
-		if(cooldown.contains(p)){
 		Tokens.getManager().addTokens(p.getName(), reward);
-		cooldown.remove(p);
-		new BukkitRunnable(){
-			public void run() {
-			p.sendMessage(ChatColor.GREEN + "" + ChatColor.UNDERLINE + "You just got " + ChatColor.GOLD + reward + ChatColor.GREEN + " tokens for loging on today, Next reward in 24 Hours!");
-			}	
-		}.runTaskLater(XaeusHub.getPlugin(), 20);
-		
-		} else {
-			new BukkitRunnable(){
-				public void run() {
-					p.sendMessage(ChatColor.GREEN + "" + ChatColor.UNDERLINE + "Already got your reward today, Next reward in 24 Hours!");
-					}
-				}.runTaskLater(XaeusHub.getPlugin(), 20);
-		}
-		
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(XaeusHub.getPlugin(), new Runnable() {
-            public void run() {
-                    cooldown.add(p);
-            }}, 86400);
 	}
 	@EventHandler 
 	public void onPlayerQuit(PlayerQuitEvent e) {

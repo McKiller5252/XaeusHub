@@ -7,7 +7,6 @@ import me.McKiller5252.xaeushub.shop.XaeusShopGui;
 import me.McKiller5252.xaeushub.tokens.TokenCommandHandler;
 import me.McKiller5252.xaeushub.tokens.Tokens;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,18 +57,14 @@ public class XaeusHub extends JavaPlugin implements Listener{
 	@EventHandler
 	public void onPlayerClick(PlayerInteractEvent e){
 		Player p = e.getPlayer();
-		if(p.isOp()){
 		if(e.getAction() == Action.RIGHT_CLICK_BLOCK | e.getAction() == Action.RIGHT_CLICK_AIR){
         if (p.getItemInHand() != null) {
             ItemStack item = p.getItemInHand();
             if (item.getType() == Material.GHAST_TEAR) { 
             	xsg.show(e.getPlayer()); 
                 }
-            }
 		}
-       } else {
-			p.sendMessage(ChatColor.RED + "This Feature Is Still In Development");
-		}
+       }
 	}
 
 	public void startAutoSaveTask(){

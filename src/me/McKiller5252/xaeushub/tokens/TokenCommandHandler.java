@@ -78,7 +78,11 @@ public class TokenCommandHandler implements CommandExecutor {
 	                    	}
 	                    	
 	                    }
-	                    
+	                   if(args[0].equalsIgnoreCase("reload") && player.isOp()){
+	                	   Bukkit.getPluginManager().disablePlugin(XaeusHub.getPlugin());
+	                	   Bukkit.getPluginManager().enablePlugin(XaeusHub.getPlugin());
+	                	   player.sendMessage(pre + ChatColor.GREEN + "Reload Complete");
+	                   }
 	                } else {
 	                    player.sendMessage(pre + "You do not have permission to use this command!");
 	                }

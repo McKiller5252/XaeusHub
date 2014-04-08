@@ -10,6 +10,7 @@ public class Tokens {
 	
 	private static Tokens tokens = new Tokens();
 	
+	
 	public static Tokens getManager(){
 		return tokens;
 	}
@@ -60,6 +61,7 @@ public class Tokens {
             map.put(keys, amount);
         }
 		System.out.print("[XaeusHub] Loaded Tokens Configuration File!");
+	
 	}
 
     public void startSaveTask(){
