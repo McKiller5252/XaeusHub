@@ -16,14 +16,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-public class XaeusShopGui implements Listener{
+public class XaeusShop implements Listener{
 	
 	private Inventory hat;
 	
 	private ItemStack a, b, c, d, e, f, g, h, i, j;
 	private ItemStack z;
 	
-	Player p;
+	public Player p;
 	
 	public ChatColor gre = ChatColor.GOLD;
 	public ChatColor lock = ChatColor.RED;
@@ -42,7 +42,7 @@ public class XaeusShopGui implements Listener{
 	 int Pumpkin = 750;
 	 int Snow = 850;
 	 
-	public XaeusShopGui(Plugin m){
+	public XaeusShop(Plugin m){
 		hat = Bukkit.getServer().createInventory(null, 27, ChatColor.YELLOW + "Xaeus Hat Shop");
 		
 		//All Hats

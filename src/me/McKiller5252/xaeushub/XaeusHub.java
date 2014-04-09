@@ -1,9 +1,10 @@
 package me.McKiller5252.xaeushub;
 
 import me.McKiller5252.xaeushub.bar.XaeusBar;
+import me.McKiller5252.xaeushub.config.ConfigManager;
 import me.McKiller5252.xaeushub.listeners.PlayerListener;
 import me.McKiller5252.xaeushub.scoreboard.XaeusBoard;
-import me.McKiller5252.xaeushub.shop.XaeusShopGui;
+import me.McKiller5252.xaeushub.shop.XaeusShop;
 import me.McKiller5252.xaeushub.tokens.TokenCommandHandler;
 import me.McKiller5252.xaeushub.tokens.Tokens;
 
@@ -23,7 +24,7 @@ public class XaeusHub extends JavaPlugin implements Listener{
 	public static XaeusHub plugin;
 	public static XaeusBoard sb;
 	public static XaeusBar bar;
-	private XaeusShopGui xsg;
+	private XaeusShop xsg;
 	
 	public static XaeusHub getPlugin(){
 		return plugin;
@@ -38,15 +39,16 @@ public class XaeusHub extends JavaPlugin implements Listener{
 		this.saveConfig();
 		plugin = this;
 		try{
-	    getServer().getPluginManager().registerEvents(new PlayerListener(), this);
-		getServer().getPluginManager().registerEvents(this, this);
-		getCommand("tokens").setExecutor(new TokenCommandHandler());
-		Tokens.getManager().loadConfig();
-		startAutoSaveTask();
-		
-		sb = new XaeusBoard(this);
-		bar = new XaeusBar(this);
-		xsg = new XaeusShopGui(this);
+			ConfigManager.load(this, "Hats.yml");
+			getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+			getServer().getPluginManager().registerEvents(this, this);
+			getCommand("tokens").setExecutor(new TokenCommandHandler());
+			Tokens.getManager().loadConfig();
+			startAutoSaveTask();
+			
+			sb = new XaeusBoard(this);
+			bar = new XaeusBar(this);
+			xsg = new XaeusShop(this);
 		} 
 		catch (Exception e){
             e.printStackTrace();
