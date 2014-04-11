@@ -1,7 +1,7 @@
 package me.McKiller5252.xaeushub.shop;
 
-import java.util.Arrays;
-
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -80,7 +80,10 @@ public class XaeusShop implements Listener{
 		ItemStack i = new ItemStack(dc);
 		ItemMeta im = i.getItemMeta();
 		im.setDisplayName(name);
-		im.setLore(Arrays.asList("§7Cost: §6" + cost));
+		List<String> lore = new ArrayList<String>();
+		lore.add("§7Cost: §6" + cost);
+		lore.add(lock + "Click To Purchase");
+		im.setLore(lore);
 		i.setItemMeta(im);
 		return i;
 	}
