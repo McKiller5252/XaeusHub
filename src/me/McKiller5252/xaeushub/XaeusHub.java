@@ -1,6 +1,7 @@
 package me.McKiller5252.xaeushub;
 
 import me.McKiller5252.xaeushub.bar.XaeusBar;
+import me.McKiller5252.xaeushub.config.ConfigManager;
 import me.McKiller5252.xaeushub.listeners.PlayerListener;
 import me.McKiller5252.xaeushub.scoreboard.XaeusBoard;
 import me.McKiller5252.xaeushub.shop.XaeusShop;
@@ -23,7 +24,7 @@ public class XaeusHub extends JavaPlugin implements Listener{
 	public static XaeusHub plugin;
 	public static XaeusBoard sb;
 	public static XaeusBar bar;
-	private XaeusShop xsg;
+	public static XaeusShop xsg;
 	
 	public static XaeusHub getPlugin(){
 		return plugin;
@@ -38,6 +39,7 @@ public class XaeusHub extends JavaPlugin implements Listener{
 		this.saveConfig();
 		plugin = this;
 		try{
+			ConfigManager.load(this, "hats.yml");
 			getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 			getServer().getPluginManager().registerEvents(this, this);
 			getCommand("tokens").setExecutor(new TokenCommandHandler());
