@@ -24,7 +24,7 @@ import org.bukkit.plugin.Plugin;
 
 public class XaeusShop implements Listener{
 
-	private static Inventory hat;
+	private Inventory hat;
 
 	private ItemStack a, b, c, d, e, f, g, h, i, j;
 	private ItemStack z;
@@ -34,7 +34,7 @@ public class XaeusShop implements Listener{
 	public ChatColor gre = ChatColor.GOLD;
 	public ChatColor lock = ChatColor.RED;
 	public ChatColor unlock = ChatColor.GREEN;
-
+	
 	public String pre = ChatColor.YELLOW + "[" + ChatColor.GOLD + "XaeusNetwork" + ChatColor.YELLOW + "] ";
 	
 	FileConfiguration config = ConfigManager.get("hats.yml");
@@ -50,11 +50,6 @@ public class XaeusShop implements Listener{
 	 int Pumpkin = 750;
 	 int Snow = 850;
 	 
-	 public static Inventory getHat(){
-		return hat;
-		 
-	 }
-
 	public XaeusShop(Plugin m){
 		hat = Bukkit.getServer().createInventory(null, 27, ChatColor.YELLOW + "Xaeus Hat Shop");
 
@@ -125,30 +120,33 @@ public class XaeusShop implements Listener{
 			ev.setCancelled(true);
 
 		if(ev.getCurrentItem().getItemMeta().getDisplayName().contains("Miner's Hat")){
-			if(money >= Miner){
-				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
-				p.sendMessage(pre + unlock + "You successfully bought the Miner's Hat");
-				
-				Tokens.getManager().removeTokens(p.getName(), Miner);
-				XaeusHub.getBoard().updatescoreboardforeveryone();
-				
-				String path = "Hats.Players." + p.getName() + ".Miners Hat";
-				config.set(path, "Bought");
-				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
-				
-				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
-				p.getInventory().setHelmet(new ItemStack(Material.DIAMOND_ORE, 1));
-			}else{
-				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
-				p.sendMessage(pre + lock + "You don't have enough tokens to buy this hat.");
-				p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 50, 1);
-				String path = "Hats.Players." + p.getName() + ".Miners Hat";
-				config.set(path, "LOCKED");
-				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
-			}
+			String path = "Hats.Players." + p.getName() + ".Miners Hat";
+			if(!config.contains(path)){
+				if(money >= Miner){
+					ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
+					p.sendMessage(pre + unlock + "You successfully bought the Miner's Hat");
+					
+					Tokens.getManager().removeTokens(p.getName(), Miner);
+					XaeusHub.getBoard().updatescoreboardforeveryone();
+					
+					config.set(path, "Bought");
+					ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
+					
+					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
+					p.getInventory().setHelmet(new ItemStack(Material.DIAMOND_ORE, 1));
+				}else{
+					p.sendMessage(pre + lock + "You don't have enough tokens to buy this hat.");
+					p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 50, 1);
+					}
+				}else{
+					p.sendMessage(pre + unlock + "You already own this hat.");
+					p.playSound(p.getLocation(), Sound.LEVEL_UP, 50, 5);
+					}
 			p.closeInventory();
 		}
 		if(ev.getCurrentItem().getItemMeta().getDisplayName().contains("Spiderman Hat")){
+			String path = "Hats.Players." + p.getName() + ".Spiderman Hat";
+			if(!config.contains(path)){
 			if(money >= Cob){
 				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + unlock + "You successfully bought the Spiderman Hat");
@@ -156,23 +154,24 @@ public class XaeusShop implements Listener{
 				Tokens.getManager().removeTokens(p.getName(), Cob);
 				XaeusHub.getBoard().updatescoreboardforeveryone();
 				
-				String path = "Hats.Players." + p.getName() + ".Spiderman Hat";
 				config.set(path, "Bought");
 				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
 				
 				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 				p.getInventory().setHelmet(new ItemStack(Material.WEB, 1));
 			}else{
-				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + lock + "You don't have enough tokens to buy this hat.");
 				p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 50, 1);
-				String path = "Hats.Players." + p.getName() + ".Spiderman Hat";
-				config.set(path, "LOCKED");
-				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
 			}
+			}else{
+				p.sendMessage(pre + unlock + "You already own this hat.");
+				p.playSound(p.getLocation(), Sound.LEVEL_UP, 50, 5);
+				}
 			p.closeInventory();
 		}
 		if(ev.getCurrentItem().getItemMeta().getDisplayName().contains("Nature Hat")){
+			String path = "Hats.Players." + p.getName() + ".Nature Hat";
+			if(!config.contains(path)){
 			if(money >= Nature){
 				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + unlock + "You successfully bought the Nature Hat");
@@ -180,23 +179,24 @@ public class XaeusShop implements Listener{
 				Tokens.getManager().removeTokens(p.getName(), Nature);
 				XaeusHub.getBoard().updatescoreboardforeveryone();
 				
-				String path = "Hats.Players." + p.getName() + ".Nature Hat";
 				config.set(path, "Bought");
 				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
 				
-				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 2f, 2f);
+				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 				p.getInventory().setHelmet(new ItemStack(Material.LEAVES, 1));
 			}else{
-				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + lock + "You don't have enough tokens to buy this hat.");
 				p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 50, 1);
-				String path = "Hats.Players." + p.getName() + ".Nature Hat";
-				config.set(path, "LOCKED");
-				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
+			}
+		    }else{
+				p.sendMessage(pre + unlock + "You already own this hat.");
+				p.playSound(p.getLocation(), Sound.LEVEL_UP, 50, 5);
 			}
 			p.closeInventory();
 		}
 		if(ev.getCurrentItem().getItemMeta().getDisplayName().contains("Spaceman Hat")){
+			String path = "Hats.Players." + p.getName() + ".Spaceman Hat";
+			if(!config.contains(path)){
 			if(money >= Space){
 				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + unlock + "You successfully bought the Spaceman Hat");
@@ -204,19 +204,19 @@ public class XaeusShop implements Listener{
 				Tokens.getManager().removeTokens(p.getName(), Space);
 				XaeusHub.getBoard().updatescoreboardforeveryone();
 				
-				String path = "Hats.Players." + p.getName() + ".Spaceman Hat";
 				config.set(path, "Bought");
 				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
+				
 				
 				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 				p.getInventory().setHelmet(new ItemStack(Material.GLASS, 1));
 			}else{
-				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + lock + "You don't have enough tokens to buy this hat.");
 				p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 50, 1);
-				String path = "Hats.Players." + p.getName() + ".Spaceman Hat";
-				config.set(path, "LOCKED");
-				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
+			}
+			}else{
+				p.sendMessage(pre + unlock + "You already own this hat.");
+				p.playSound(p.getLocation(), Sound.LEVEL_UP, 50, 5);
 			}
 			p.closeInventory();
 		}

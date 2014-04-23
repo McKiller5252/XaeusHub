@@ -83,10 +83,11 @@ public class TokenCommandHandler implements CommandExecutor {
 	                	   Bukkit.getPluginManager().enablePlugin(XaeusHub.getPlugin());
 	                	   player.sendMessage(pre + ChatColor.GREEN + "Reload Complete");
 	                   }
-	                } else {
-	                    player.sendMessage(pre + "You do not have permission to use this command!");
-	                }
+	                } 
 	            }
+	             else {
+	                  player.sendMessage(pre + "You do not have permission to use this command!");
+	                }
 	          }
 		 }
 		 return false;
