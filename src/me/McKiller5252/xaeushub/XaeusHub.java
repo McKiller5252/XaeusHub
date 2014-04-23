@@ -40,6 +40,7 @@ public class XaeusHub extends JavaPlugin implements Listener{
 		plugin = this;
 		try{
 			ConfigManager.load(this, "hats.yml");
+			ConfigManager.load(this, "players.yml");
 			getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 			getServer().getPluginManager().registerEvents(this, this);
 			getCommand("tokens").setExecutor(new TokenCommandHandler());

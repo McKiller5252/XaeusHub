@@ -16,7 +16,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class PlayerListener implements Listener {
 	
-	int reward = 2;
+	int reward = 5;
 	
 	@EventHandler 
 	public void onJoin(PlayerJoinEvent e){
