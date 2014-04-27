@@ -6,12 +6,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import me.McKiller5252.xaeushub.XaeusHub;
 
-public class Tokens {
+public class TokenApi {
 	
-	private static Tokens tokens = new Tokens();
+	private static TokenApi tokens = new TokenApi();
 	
 	
-	public static Tokens getManager(){
+	public static TokenApi getManager(){
 		return tokens;
 	}
 	

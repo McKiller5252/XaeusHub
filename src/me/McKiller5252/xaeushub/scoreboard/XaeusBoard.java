@@ -1,7 +1,7 @@
 package me.McKiller5252.xaeushub.scoreboard;
 
 import me.McKiller5252.xaeushub.XaeusHub;
-import me.McKiller5252.xaeushub.tokens.Tokens;
+import me.McKiller5252.xaeushub.tokens.TokenApi;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ public class XaeusBoard {
 		o.setDisplayName(prefix);
 		
 		int online  = Bukkit.getServer().getOnlinePlayers().length;
-		int tokens  = Tokens.getManager().getTokens(p.getName());
+		int tokens  = TokenApi.getManager().getTokens(p.getName());
 		
 		o.getScore(Bukkit.getOfflinePlayer(g + b.toString() + "Online:")).setScore(8);
 		o.getScore(Bukkit.getOfflinePlayer(y.toString() + online)).setScore(7);

@@ -2,12 +2,14 @@ package me.McKiller5252.xaeushub;
 
 import me.McKiller5252.xaeushub.bar.XaeusBar;
 import me.McKiller5252.xaeushub.config.ConfigManager;
+import me.McKiller5252.xaeushub.listeners.ArmorClick;
 import me.McKiller5252.xaeushub.listeners.PlayerListener;
 import me.McKiller5252.xaeushub.scoreboard.XaeusBoard;
 import me.McKiller5252.xaeushub.shop.XaeusShop;
 import me.McKiller5252.xaeushub.tokens.TokenCommandHandler;
-import me.McKiller5252.xaeushub.tokens.Tokens;
+import me.McKiller5252.xaeushub.tokens.TokenApi;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,6 +22,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 
 public class XaeusHub extends JavaPlugin implements Listener{
+	
+	public String pre = ChatColor.YELLOW + "[" + ChatColor.GOLD + "XaeusNetwork" + ChatColor.YELLOW + "] ";
 	
 	public static XaeusHub plugin;
 	public static XaeusBoard sb;
@@ -40,18 +44,18 @@ public class XaeusHub extends JavaPlugin implements Listener{
 		plugin = this;
 		try{
 			ConfigManager.load(this, "hats.yml");
-			ConfigManager.load(this, "players.yml");
 			getServer().getPluginManager().registerEvents(new PlayerListener(), this);
+			getServer().getPluginManager().registerEvents(new ArmorClick(), this);
 			getServer().getPluginManager().registerEvents(this, this);
 			getCommand("tokens").setExecutor(new TokenCommandHandler());
-			Tokens.getManager().loadConfig();
+			TokenApi.getManager().loadConfig();
 			startAutoSaveTask();
 			
 			sb = new XaeusBoard(this);
 			bar = new XaeusBar(this);
 			xsg = new XaeusShop(this);
-		} 
-		catch (Exception e){
+			
+		}catch (Exception e){
             e.printStackTrace();
             getServer().getPluginManager().disablePlugin(this);
         }

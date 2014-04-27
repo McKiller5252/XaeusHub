@@ -3,7 +3,7 @@ package me.McKiller5252.xaeushub.listeners;
 import java.util.Arrays;
 
 import me.McKiller5252.xaeushub.XaeusHub;
-import me.McKiller5252.xaeushub.tokens.Tokens;
+import me.McKiller5252.xaeushub.tokens.TokenApi;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,7 +24,7 @@ public class PlayerListener implements Listener {
 		XaeusHub.getBar().showBarChanging(e.getPlayer());
 		XaeusHub.getBoard().updatescoreboardforeveryone();
 		hatshopItem(p);
-		Tokens.getManager().addTokens(p.getName(), reward);
+		TokenApi.getManager().addTokens(p.getName(), reward);
 	}
 	@EventHandler 
 	public void onPlayerQuit(PlayerQuitEvent e) {

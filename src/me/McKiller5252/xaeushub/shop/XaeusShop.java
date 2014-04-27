@@ -2,12 +2,13 @@ package me.McKiller5252.xaeushub.shop;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 import me.McKiller5252.xaeushub.XaeusHub;
 import me.McKiller5252.xaeushub.config.ConfigManager;
-import me.McKiller5252.xaeushub.tokens.Tokens;
+import me.McKiller5252.xaeushub.tokens.TokenApi;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,25 +30,31 @@ public class XaeusShop implements Listener{
 
 	private Inventory hat;
 
-	private ItemStack a, b, c, d, e, f, g, h, i, j, k, l, m;
+	//Hats
+	private ItemStack a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q;
+	//Clear Hat
 	private ItemStack z;
 
+	//Colors
 	public ChatColor gre = ChatColor.GOLD;
 	public ChatColor lock = ChatColor.RED;
 	public ChatColor unlock = ChatColor.GREEN;
+	public ChatColor bold = ChatColor.BOLD;
+	public ChatColor under = ChatColor.UNDERLINE;
 	
+	//Prefix
 	public String pre = ChatColor.YELLOW + "[" + ChatColor.GOLD + "XaeusNetwork" + ChatColor.YELLOW + "] ";
 	
-    public int task1;
-    public int task2;
-    public int task3;
-   
     Random rand = new Random();
     
-	
 	FileConfiguration config = ConfigManager.get("hats.yml");
-	FileConfiguration peeps = ConfigManager.get("players.yml");
+	
+	//TaskId
+	final HashMap<String, Integer> taskID1 = new HashMap<String, Integer>();
+	final HashMap<String, Integer> taskID2 = new HashMap<String, Integer>();
+	final HashMap<String, Integer> taskID3 = new HashMap<String, Integer>();
 
+	//Hat Token Values
 	 int Nature = 150;
 	 int Treasure = 250;
 	 int Space = 250;
@@ -57,14 +64,17 @@ public class XaeusShop implements Listener{
 	 int Explosion = 750;
 	 int Pumpkin = 750;
 	 int Snow = 850;
-	 
+	 int Skater = 2500;
+	 int horse = 500;
+	 int libar= 250;
+	 int mush = 10000;
 	 int Wooly = 3000;
 	 int Dj = 4000;
 	 int Miner = 5000;
 	 int Party = 10000;
 	 
 	public XaeusShop(Plugin pl){
-		hat = Bukkit.getServer().createInventory(null, 27, ChatColor.YELLOW + "Xaeus Hat Shop");
+		hat = Bukkit.getServer().createInventory(null, 27, ChatColor.MAGIC + "h " +  ChatColor.DARK_AQUA + under.toString() + "Xaeus Hat Shop" + ChatColor.RESET + ChatColor.MAGIC + " h");
 
 		//All Hats
 		a = createItem(Material.DIAMOND_ORE, gre + "Miner's Hat", Miner);
@@ -75,11 +85,15 @@ public class XaeusShop implements Listener{
 		f = createItem(Material.TNT, gre + "Griefer Hat", Explosion);
 		g = createItem(Material.CHEST, gre + "Treasure Hat", Treasure);
 		h = createItem(Material.WORKBENCH, gre + "Work's Man Hat", Handy);
-		i = createItem(Material.PUMPKIN, gre + "Halloween Mask", Pumpkin);
+		i = createItem(Material.JACK_O_LANTERN, gre + "Halloween Mask", Pumpkin);
 		j = createItem(Material.SNOW_BLOCK, gre + "Christmas Hat", Snow);
 		k = createItem(Material.JUKEBOX, gre + "DJ Hat", Dj);
 		l = createItem(Material.DIAMOND_HELMET, gre + "Party Hat", Party);
 		m = createItem(Material.WOOL, gre + "Disco Hat", Wooly);
+		n = createItem(Material.PACKED_ICE, gre + "Skater Hat", Skater);
+		o = createItem(Material.HAY_BLOCK, gre + "Horsey Hat", horse);
+		p = createItem(Material.BOOKSHELF, gre + "Librarian's hat", libar);
+		q = createItem(Material.RED_MUSHROOM, gre + "Soup Hat", mush);
 
 		hat.setItem(0, a);
 		hat.setItem(1, b);
@@ -92,8 +106,12 @@ public class XaeusShop implements Listener{
 		hat.setItem(8, i);
 		hat.setItem(9, j);
 		hat.setItem(10, k);
-		hat.setItem(17, l);
+		hat.setItem(26, l);
 		hat.setItem(11, m);
+		hat.setItem(12, n);
+		hat.setItem(13, o);
+		hat.setItem(14, p);
+		hat.setItem(15, q);
 
 		//Clear Hat
 		z = createRemove(Material.GOLD_HELMET, ChatColor.GOLD + "Click to remove your Hat!");
@@ -108,7 +126,7 @@ public class XaeusShop implements Listener{
 		ItemStack i = new ItemStack(dc);
 		ItemMeta im = i.getItemMeta();
 		im.setDisplayName(name);
-		lore.add(ChatColor.GRAY + "Cost: " + ChatColor.YELLOW + cost);
+		lore.add(ChatColor.GRAY + "Tokens: " + ChatColor.YELLOW + cost);
 		im.setLore(lore);
 		i.setItemMeta(im);
 		return i;
@@ -124,11 +142,12 @@ public class XaeusShop implements Listener{
 	public void show(Player p) {
 		p.openInventory(hat);
 	}
+	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void click(InventoryClickEvent ev){
 		if(ev.getWhoClicked() instanceof Player){
 		final Player p = (Player) ev.getWhoClicked();
-		int money = XaeusHub.getPlugin().getConfig().getInt(p.getName(), Tokens.getManager().getTokens(p.getName()));
+		int money = XaeusHub.getPlugin().getConfig().getInt(p.getName(), TokenApi.getManager().getTokens(p.getName()));
 
 		if (ev.getCurrentItem() != null && !ev.getCurrentItem().getType().equals(Material.AIR)){
 
@@ -137,23 +156,18 @@ public class XaeusShop implements Listener{
 
 		if(ev.getCurrentItem().getItemMeta().getDisplayName().contains("Miner's Hat")){
 			String path = "Hats.Players." + p.getName() + ".Miners Hat";
-			String hazTask = "Players." + p.getName();
 			if(!config.contains(path)){
 				if(money >= Miner){
 					ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 					p.sendMessage(pre + unlock + "You successfully bought the Miner's Hat");
 					
-					Tokens.getManager().removeTokens(p.getName(), Miner);
+					TokenApi.getManager().removeTokens(p.getName(), Miner);
 					XaeusHub.getBoard().updatescoreboardforeveryone();
 					
 					config.set(path, "Bought");
 					ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
-					
-					peeps.set(hazTask, true);
-					ConfigManager.save(XaeusHub.getPlugin(), "players.yml");
-					
 					p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
-				 task1 = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(XaeusHub.getPlugin(), new Runnable() {
+				taskID1.put(p.getName(), Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(XaeusHub.getPlugin(), new Runnable() {
 						int currentHelm = 0;
 						Material[] helmMaterials = { Material.DIAMOND_ORE, Material.REDSTONE_ORE, Material.COAL_ORE,
 								Material.EMERALD_ORE, Material.LAPIS_ORE, Material.IRON_ORE, Material.GOLD_ORE, Material.QUARTZ_ORE};
@@ -163,7 +177,7 @@ public class XaeusShop implements Listener{
 							p.getInventory().setHelmet(helm);
 							this.currentHelm = ((this.currentHelm + 1) % this.helmMaterials.length);
 						}
-				     }, 1L, 5L);
+				     }, 1L, 5L));
 				}else{
 					p.sendMessage(pre + lock + "You don't have enough tokens to buy this hat.");
 					p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 50, 1);
@@ -171,7 +185,7 @@ public class XaeusShop implements Listener{
 				}else{
 					p.sendMessage(pre + unlock + "You already own this hat, " + gre + "Hat placed on head.");
 					p.playSound(p.getLocation(), Sound.LEVEL_UP, 50, 5);
-					task1 = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(XaeusHub.getPlugin(), new Runnable() {
+					taskID1.put(p.getName(), Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(XaeusHub.getPlugin(), new Runnable() {
 						int currentHelm = 0;
 						Material[] helmMaterials = { Material.DIAMOND_ORE, Material.REDSTONE_ORE, Material.COAL_ORE,
 								Material.EMERALD_ORE, Material.LAPIS_ORE, Material.IRON_ORE, Material.GOLD_ORE, Material.QUARTZ_ORE};
@@ -181,7 +195,119 @@ public class XaeusShop implements Listener{
 							p.getInventory().setHelmet(helm);
 							this.currentHelm = ((this.currentHelm + 1) % this.helmMaterials.length);
 						}
-					}, 1L, 5L);
+					}, 1L, 5L));
+				}
+			p.closeInventory();
+		}
+		if(ev.getCurrentItem().getItemMeta().getDisplayName().contains("Skater Hat")){
+			String path = "Hats.Players." + p.getName() + ".Skater Hat";
+			if(!config.contains(path)){
+			if(money >= Skater){
+				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
+				p.sendMessage(pre + unlock + "You successfully bought the Skater Hat");
+				
+				TokenApi.getManager().removeTokens(p.getName(), Skater);
+				XaeusHub.getBoard().updatescoreboardforeveryone();
+				
+				config.set(path, "Bought");
+				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
+				
+			
+				
+				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
+				p.getInventory().setHelmet(new ItemStack(Material.PACKED_ICE, 1));
+			}else{
+				p.sendMessage(pre + lock + "You don't have enough tokens to buy this hat.");
+				p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 50, 1);
+			}
+			}else{
+				p.sendMessage(pre + unlock + "You already own this hat, " + gre + "Hat placed on head.");
+				p.playSound(p.getLocation(), Sound.LEVEL_UP, 50, 5);
+				p.getInventory().setHelmet(new ItemStack(Material.PACKED_ICE, 1));
+				}
+			p.closeInventory();
+		}
+		if(ev.getCurrentItem().getItemMeta().getDisplayName().contains("Horsey Hat")){
+			String path = "Hats.Players." + p.getName() + ".Horsey Hat";
+			if(!config.contains(path)){
+			if(money >= horse){
+				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
+				p.sendMessage(pre + unlock + "You successfully bought the Horsey Hat");
+				
+				TokenApi.getManager().removeTokens(p.getName(), horse);
+				XaeusHub.getBoard().updatescoreboardforeveryone();
+				
+				config.set(path, "Bought");
+				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
+				
+			
+				
+				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
+				p.getInventory().setHelmet(new ItemStack(Material.HAY_BLOCK, 1));
+			}else{
+				p.sendMessage(pre + lock + "You don't have enough tokens to buy this hat.");
+				p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 50, 1);
+			}
+			}else{
+				p.sendMessage(pre + unlock + "You already own this hat, " + gre + "Hat placed on head.");
+				p.playSound(p.getLocation(), Sound.LEVEL_UP, 50, 5);
+				p.getInventory().setHelmet(new ItemStack(Material.HAY_BLOCK, 1));
+				}
+			p.closeInventory();
+		}
+		if(ev.getCurrentItem().getItemMeta().getDisplayName().contains("Librarian's hat")){
+			String path = "Hats.Players." + p.getName() + ".Librarians hat";
+			if(!config.contains(path)){
+			if(money >= libar){
+				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
+				p.sendMessage(pre + unlock + "You successfully bought the Librarian's hat");
+				
+				TokenApi.getManager().removeTokens(p.getName(), libar);
+				XaeusHub.getBoard().updatescoreboardforeveryone();
+				
+				config.set(path, "Bought");
+				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
+				
+			
+				
+				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
+				p.getInventory().setHelmet(new ItemStack(Material.BOOKSHELF, 1));
+			}else{
+				p.sendMessage(pre + lock + "You don't have enough tokens to buy this hat.");
+				p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 50, 1);
+			}
+			}else{
+				p.sendMessage(pre + unlock + "You already own this hat, " + gre + "Hat placed on head.");
+				p.playSound(p.getLocation(), Sound.LEVEL_UP, 50, 5);
+				p.getInventory().setHelmet(new ItemStack(Material.BOOKSHELF, 1));
+				}
+			p.closeInventory();
+		}
+		if(ev.getCurrentItem().getItemMeta().getDisplayName().contains("Soup Hat")){
+			String path = "Hats.Players." + p.getName() + ".Soup Hat";
+			if(!config.contains(path)){
+			if(money >= mush){
+				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
+				p.sendMessage(pre + unlock + "You successfully bought the Soup Hat");
+				
+				TokenApi.getManager().removeTokens(p.getName(), mush);
+				XaeusHub.getBoard().updatescoreboardforeveryone();
+				
+				config.set(path, "Bought");
+				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
+				
+			
+				
+				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
+				p.getInventory().setHelmet(new ItemStack(Material.RED_MUSHROOM, 1));
+			}else{
+				p.sendMessage(pre + lock + "You don't have enough tokens to buy this hat.");
+				p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 50, 1);
+			}
+			}else{
+				p.sendMessage(pre + unlock + "You already own this hat, " + gre + "Hat placed on head.");
+				p.playSound(p.getLocation(), Sound.LEVEL_UP, 50, 5);
+				p.getInventory().setHelmet(new ItemStack(Material.RED_MUSHROOM, 1));
 				}
 			p.closeInventory();
 		}
@@ -192,15 +318,13 @@ public class XaeusShop implements Listener{
 				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + unlock + "You successfully bought the Spiderman Hat");
 				
-				Tokens.getManager().removeTokens(p.getName(), Cob);
+				TokenApi.getManager().removeTokens(p.getName(), Cob);
 				XaeusHub.getBoard().updatescoreboardforeveryone();
 				
 				config.set(path, "Bought");
 				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
 				
-				String hazTask = "Players." + p.getName();
-				peeps.set(hazTask, true);
-				ConfigManager.save(XaeusHub.getPlugin(), "players.yml");
+			
 				
 				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 				p.getInventory().setHelmet(new ItemStack(Material.WEB, 1));
@@ -222,12 +346,10 @@ public class XaeusShop implements Listener{
 				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + unlock + "You successfully bought the Nature Hat");
 				
-				Tokens.getManager().removeTokens(p.getName(), Nature);
+				TokenApi.getManager().removeTokens(p.getName(), Nature);
 				XaeusHub.getBoard().updatescoreboardforeveryone();
 				
-				String hazTask = "Players." + p.getName();
-				peeps.set(hazTask, true);
-				ConfigManager.save(XaeusHub.getPlugin(), "players.yml");
+				
 				
 				config.set(path, "Bought");
 				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
@@ -252,15 +374,13 @@ public class XaeusShop implements Listener{
 				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + unlock + "You successfully bought the Spaceman Hat");
 				
-				Tokens.getManager().removeTokens(p.getName(), Space);
+				TokenApi.getManager().removeTokens(p.getName(), Space);
 				XaeusHub.getBoard().updatescoreboardforeveryone();
 				
 				config.set(path, "Bought");
 				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
 				
-				String hazTask = "Players." + p.getName();
-				peeps.set(hazTask, true);
-				ConfigManager.save(XaeusHub.getPlugin(), "players.yml");
+				
 				
 				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 				p.getInventory().setHelmet(new ItemStack(Material.GLASS, 1));
@@ -282,15 +402,13 @@ public class XaeusShop implements Listener{
 				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + unlock + "You successfully bought the Beach Bum Hat");
 				
-				Tokens.getManager().removeTokens(p.getName(), Beach);
+				TokenApi.getManager().removeTokens(p.getName(), Beach);
 				XaeusHub.getBoard().updatescoreboardforeveryone();
 				
 				config.set(path, "Bought");
 				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
 				
-				String hazTask = "Players." + p.getName();
-				peeps.set(hazTask, true);
-				ConfigManager.save(XaeusHub.getPlugin(), "players.yml");
+				
 				
 				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 				p.getInventory().setHelmet(new ItemStack(Material.SAND, 1));
@@ -312,15 +430,13 @@ public class XaeusShop implements Listener{
 				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + unlock + "You successfully bought the Griefer Hat");
 				
-				Tokens.getManager().removeTokens(p.getName(), Explosion);
+				TokenApi.getManager().removeTokens(p.getName(), Explosion);
 				XaeusHub.getBoard().updatescoreboardforeveryone();
 				
 				config.set(path, "Bought");
 				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
 				
-				String hazTask = "Players." + p.getName();
-				peeps.set(hazTask, true);
-				ConfigManager.save(XaeusHub.getPlugin(), "players.yml");
+				
 				
 				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 				p.getInventory().setHelmet(new ItemStack(Material.TNT, 1));
@@ -342,15 +458,12 @@ public class XaeusShop implements Listener{
 				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + unlock + "You successfully bought the Treasure Hat");
 				
-				Tokens.getManager().removeTokens(p.getName(), Treasure);
+				TokenApi.getManager().removeTokens(p.getName(), Treasure);
 				XaeusHub.getBoard().updatescoreboardforeveryone();
 				
 				config.set(path, "Bought");
 				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
 				
-				String hazTask = "Players." + p.getName();
-				peeps.set(hazTask, true);
-				ConfigManager.save(XaeusHub.getPlugin(), "players.yml");
 				
 				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 				p.getInventory().setHelmet(new ItemStack(Material.CHEST, 1));
@@ -372,15 +485,13 @@ public class XaeusShop implements Listener{
 				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + unlock + "You successfully bought the Work's Man");
 				
-				Tokens.getManager().removeTokens(p.getName(), Handy);
+				TokenApi.getManager().removeTokens(p.getName(), Handy);
 				XaeusHub.getBoard().updatescoreboardforeveryone();
 				
 				config.set(path, "Bought");
 				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
 				
-				String hazTask = "Players." + p.getName();
-				peeps.set(hazTask, true);
-				ConfigManager.save(XaeusHub.getPlugin(), "players.yml");
+				
 				
 				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 				p.getInventory().setHelmet(new ItemStack(Material.WORKBENCH, 1));
@@ -402,18 +513,16 @@ public class XaeusShop implements Listener{
 				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + unlock + "You successfully bought the Halloween Mask");
 				
-				Tokens.getManager().removeTokens(p.getName(), Pumpkin);
+				TokenApi.getManager().removeTokens(p.getName(), Pumpkin);
 				XaeusHub.getBoard().updatescoreboardforeveryone();
 				
 				config.set(path, "Bought");
 				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
 				
-				String hazTask = "Players." + p.getName();
-				peeps.set(hazTask, true);
-				ConfigManager.save(XaeusHub.getPlugin(), "players.yml");
+				
 				
 				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
-				p.getInventory().setHelmet(new ItemStack(Material.PUMPKIN, 1));
+				p.getInventory().setHelmet(new ItemStack(Material.JACK_O_LANTERN, 1));
 			}else{
 				p.sendMessage(pre + lock + "You don't have enough tokens to buy this hat.");
 				p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 50, 1);
@@ -421,7 +530,7 @@ public class XaeusShop implements Listener{
 			}else{
 				p.sendMessage(pre + unlock + "You already own this hat, " + gre + "Hat placed on head.");
 				p.playSound(p.getLocation(), Sound.LEVEL_UP, 50, 5);
-				p.getInventory().setHelmet(new ItemStack(Material.PUMPKIN, 1));
+				p.getInventory().setHelmet(new ItemStack(Material.JACK_O_LANTERN, 1));
 			}
 			p.closeInventory();
 		}
@@ -432,15 +541,13 @@ public class XaeusShop implements Listener{
 				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + unlock + "You successfully bought the Christmas Hat");
 				
-				Tokens.getManager().removeTokens(p.getName(), Snow);
+				TokenApi.getManager().removeTokens(p.getName(), Snow);
 				XaeusHub.getBoard().updatescoreboardforeveryone();
 				
 				config.set(path, "Bought");
 				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
 				
-				String hazTask = "Players." + p.getName();
-				peeps.set(hazTask, true);
-				ConfigManager.save(XaeusHub.getPlugin(), "players.yml");
+				
 				
 				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
 				p.getInventory().setHelmet(new ItemStack(Material.SNOW_BLOCK, 1));
@@ -461,15 +568,13 @@ public class XaeusShop implements Listener{
 				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + unlock + "You successfully bought the DJ Hat");
 				
-				Tokens.getManager().removeTokens(p.getName(), Dj);
+				TokenApi.getManager().removeTokens(p.getName(), Dj);
 				XaeusHub.getBoard().updatescoreboardforeveryone();
 				
 				config.set(path, "Bought");
 				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
 				
-				String hazTask = "Players." + p.getName();
-				peeps.set(hazTask, true);
-				ConfigManager.save(XaeusHub.getPlugin(), "players.yml");
+			
 				
 				
 				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
@@ -486,23 +591,21 @@ public class XaeusShop implements Listener{
 			p.closeInventory();
 		}if(ev.getCurrentItem().getItemMeta().getDisplayName().contains("Party Hat")){
 			String path = "Hats.Players." + p.getName() + ".Party Hat";
-			String hazTask = "Players." + p.getName();
 			if(!config.contains(path)){
 			if(money >= Party){
 				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + unlock + "You successfully bought the Party Hat");
 				
-				Tokens.getManager().removeTokens(p.getName(), Party);
+				TokenApi.getManager().removeTokens(p.getName(), Party);
 				XaeusHub.getBoard().updatescoreboardforeveryone();
 				
 				config.set(path, "Bought");
 				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
 				
-				peeps.set(hazTask, true);
-				ConfigManager.save(XaeusHub.getPlugin(), "players.yml");
+			
 				
 				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
-				task2 = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(XaeusHub.getPlugin(), new Runnable() {
+				taskID2.put(p.getName(), Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(XaeusHub.getPlugin(), new Runnable() {
 					int currentHelm = 0;
 					Material[] helmMaterials = { Material.STONE, Material.GRASS, Material.DIRT, Material.COBBLESTONE, 
 							Material.BEDROCK, Material.SAND, Material.GRAVEL, Material.GOLD_ORE, 
@@ -523,7 +626,7 @@ public class XaeusShop implements Listener{
 						p.getInventory().setHelmet(helm);
 						this.currentHelm = ((this.currentHelm + 1) % this.helmMaterials.length);
 					}
-				}, 1L, 5L);
+				}, 1L, 5L));
 			}else{
 				p.sendMessage(pre + lock + "You don't have enough tokens to buy this hat.");
 				p.playSound(p.getLocation(), Sound.ENDERMAN_TELEPORT, 50, 1);
@@ -531,7 +634,7 @@ public class XaeusShop implements Listener{
 			}else{
 				p.sendMessage(pre + unlock + "You already own this hat, " + gre + "Hat placed on head.");
 				p.playSound(p.getLocation(), Sound.LEVEL_UP, 50, 5);
-				task2 = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(XaeusHub.getPlugin(), new Runnable() {
+				taskID2.put(p.getName(), Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(XaeusHub.getPlugin(), new Runnable() {
 					int currentHelm = 0;
 					Material[] helmMaterials = { Material.STONE, Material.GRASS, Material.DIRT, Material.COBBLESTONE, 
 							Material.BEDROCK, Material.SAND, Material.GRAVEL, Material.GOLD_ORE, 
@@ -552,29 +655,26 @@ public class XaeusShop implements Listener{
 						p.getInventory().setHelmet(helm);
 						this.currentHelm = ((this.currentHelm + 1) % this.helmMaterials.length);
 					}
-				}, 1L, 5L);
+				}, 1L, 5L));
 			}
 			p.closeInventory();
 		}
 		if(ev.getCurrentItem().getItemMeta().getDisplayName().contains("Disco Hat")){
 			String path = "Hats.Players." + p.getName() + ".Disco Hat";
-			String hazTask = "Players." + p.getName();
 			if(!config.contains(path)){
 			if(money >= Wooly){
 				ConfigManager.reload(XaeusHub.getPlugin(), "hats.yml");
 				p.sendMessage(pre + unlock + "You successfully bought the Disco Hat");
 				
-				Tokens.getManager().removeTokens(p.getName(), Wooly);
+				TokenApi.getManager().removeTokens(p.getName(), Wooly);
 				XaeusHub.getBoard().updatescoreboardforeveryone();
 
 				config.set(path, "Bought");
 				ConfigManager.save(XaeusHub.getPlugin(), "hats.yml");
 				
-				peeps.set(hazTask, true);
-				ConfigManager.save(XaeusHub.getPlugin(), "players.yml");
 	
 				p.playSound(p.getLocation(), Sound.ORB_PICKUP, 1f, 1f);
-				task3 = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(XaeusHub.getPlugin(), new Runnable() {
+				taskID3.put(p.getName(), Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(XaeusHub.getPlugin(), new Runnable() {
 					List<DyeColor> discoColours = Arrays.asList(DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.GREEN, 
 							DyeColor.BLUE, DyeColor.LIGHT_BLUE,DyeColor.PINK, DyeColor.MAGENTA, DyeColor.LIME, DyeColor.CYAN, 
 							DyeColor.PURPLE, DyeColor.BLACK, DyeColor.WHITE);
@@ -584,7 +684,7 @@ public class XaeusShop implements Listener{
 						ItemStack helm = new ItemStack(Material.WOOL, 1, dyeColour.getWoolData());
 						p.getInventory().setHelmet(helm);
 					}
-			}, 1L, 5L);
+			}, 1L, 5L));
 				
 			}else{
 				p.sendMessage(pre + lock + "You don't have enough tokens to buy this hat.");
@@ -593,7 +693,7 @@ public class XaeusShop implements Listener{
 			}else{
 				p.sendMessage(pre + unlock + "You already own this hat, " + gre + "Hat placed on head.");
 				p.playSound(p.getLocation(), Sound.LEVEL_UP, 50, 5);
-				task3 = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(XaeusHub.getPlugin(), new Runnable() {
+				taskID3.put(p.getName(), Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(XaeusHub.getPlugin(), new Runnable() {
 					List<DyeColor> discoColours = Arrays.asList(DyeColor.RED, DyeColor.ORANGE, DyeColor.YELLOW, DyeColor.GREEN, 
 							DyeColor.BLUE, DyeColor.LIGHT_BLUE,DyeColor.PINK, DyeColor.MAGENTA, DyeColor.LIME, DyeColor.CYAN, 
 							DyeColor.PURPLE, DyeColor.BLACK, DyeColor.WHITE);
@@ -603,19 +703,25 @@ public class XaeusShop implements Listener{
 						ItemStack helm = new ItemStack(Material.WOOL, 1, dyeColour.getWoolData());
 						p.getInventory().setHelmet(helm);
 					}
-				}, 1L, 5L);
+				}, 1L, 5L));
 				
 			}
 			p.closeInventory();
 		}
+		
 		if(ev.getCurrentItem().getItemMeta().getDisplayName().contains("Click to remove your Hat!")){
-			if(p.getInventory().getHelmet() != null){
-				if(peeps.getBoolean(ev.getWhoClicked().getName()) == true){
-					Bukkit.getScheduler().cancelTask(task1);
-					Bukkit.getScheduler().cancelTask(task2);
-					Bukkit.getScheduler().cancelTask(task3);
+			if(p.getInventory().getArmorContents() != null){
+				if(taskID1.containsKey(p.getName())){
+				  Bukkit.getScheduler().cancelTask(taskID1.get(p.getName()));
+				  taskID1.remove(p.getName());
+				}if(taskID2.containsKey(p.getName())){
+				  Bukkit.getScheduler().cancelTask(taskID2.get(p.getName()));
+				  taskID2.remove(p.getName());
+				}if(taskID3.containsKey(p.getName())){
+				  Bukkit.getScheduler().cancelTask(taskID3.get(p.getName()));
+				  taskID3.remove(p.getName());
 				}
-				p.getInventory().setHelmet(null);
+				p.getInventory().setArmorContents(null);
 				p.sendMessage(pre + unlock + "You successfully removed a hat!");
 			}else{
 				p.sendMessage(pre + lock + "You don't have a hat on to remove!");

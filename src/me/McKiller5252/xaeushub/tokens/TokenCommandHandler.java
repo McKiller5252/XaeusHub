@@ -43,7 +43,7 @@ public class TokenCommandHandler implements CommandExecutor {
 	                            } else {
 	                                if (NumberUtils.isNumber(args[2])) {
 	                                    int amount = Integer.parseInt(args[2]);
-	                                    Tokens.getManager().addTokens(target.getName(), amount);
+	                                    TokenApi.getManager().addTokens(target.getName(), amount);
 	                                    XaeusHub.getBoard().updatescoreboardforeveryone();
 	                                    player.sendMessage(pre + "§7You have added §2" + args[2] + "§7 tokens to §2" + args[1] + "'s §7account.");
 	                                } else {
@@ -58,7 +58,7 @@ public class TokenCommandHandler implements CommandExecutor {
 		                            } else {
 		                                if (NumberUtils.isNumber(args[2])) {
 		                                    int amount = Integer.parseInt(args[2]);
-		                                    Tokens.getManager().removeTokens(target1.getName(), amount);
+		                                    TokenApi.getManager().removeTokens(target1.getName(), amount);
 		                                    XaeusHub.getBoard().updatescoreboardforeveryone();
 		                                    player.sendMessage(pre + "§7You have removed §2" + args[2] + "§7 tokens from §2" + args[1] + "'s §7account.");
 		                                } else {
@@ -70,7 +70,7 @@ public class TokenCommandHandler implements CommandExecutor {
 	                    	Player target2 = Bukkit.getPlayerExact(args[1]);
 	                    	if(NumberUtils.isNumber(args[2])){
 	                    		int amount = Integer.parseInt(args[2]);
-	                    		Tokens.getManager().setTokens(target2.getName(), amount);
+	                    		TokenApi.getManager().setTokens(target2.getName(), amount);
 	                    		 XaeusHub.getBoard().updatescoreboardforeveryone();
                                  player.sendMessage(pre + "§7You have set §2" + args[2] + "§7 tokens to §2" + args[1] + "'s §7account.");
                              } else {
