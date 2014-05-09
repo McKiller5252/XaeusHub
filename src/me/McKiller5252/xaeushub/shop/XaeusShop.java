@@ -710,7 +710,7 @@ public class XaeusShop implements Listener{
 		}
 		
 		if(ev.getCurrentItem().getItemMeta().getDisplayName().contains("Click to remove your Hat!")){
-			if(p.getInventory().getArmorContents() != null){
+			if(p.getInventory().getHelmet() != null){
 				if(taskID1.containsKey(p.getName())){
 				  Bukkit.getScheduler().cancelTask(taskID1.get(p.getName()));
 				  taskID1.remove(p.getName());
@@ -723,9 +723,10 @@ public class XaeusShop implements Listener{
 				}
 				p.getInventory().setArmorContents(null);
 				p.sendMessage(pre + unlock + "You successfully removed a hat!");
-			}else{
-				p.sendMessage(pre + lock + "You don't have a hat on to remove!");
 			}
+			else
+				p.sendMessage(pre + lock + "You don't have a hat on to remove!");
+			
 			p.closeInventory();	
 		 }
 		}

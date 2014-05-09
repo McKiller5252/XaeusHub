@@ -16,15 +16,18 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class PlayerListener implements Listener {
 	
-	int reward = 5;
+	int reward = 50;
 	
 	@EventHandler 
 	public void onJoin(PlayerJoinEvent e){
 		final Player p = e.getPlayer();
+		if(p.hasPlayedBefore()){
+			TokenApi.getManager().addTokens(p.getName(), reward);
+			p.sendMessage(ChatColor.GREEN + "You get " + ChatColor.RED + reward + ChatColor.GREEN  + " tokens for joining the server.");
+		}
 		XaeusHub.getBar().showBarChanging(e.getPlayer());
 		XaeusHub.getBoard().updatescoreboardforeveryone();
 		hatshopItem(p);
-		TokenApi.getManager().addTokens(p.getName(), reward);
 	}
 	@EventHandler 
 	public void onPlayerQuit(PlayerQuitEvent e) {
