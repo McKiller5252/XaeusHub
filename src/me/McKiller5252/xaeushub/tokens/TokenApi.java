@@ -68,7 +68,6 @@ public class TokenApi {
         new BukkitRunnable(){
             public void run(){
             	XaeusHub.getPlugin().saveConfig();
-            	XaeusHub.getBoard().updatescoreboardforeveryone();
             }
         }.runTaskTimer(XaeusHub.getPlugin(), 20*5, 20);
     }

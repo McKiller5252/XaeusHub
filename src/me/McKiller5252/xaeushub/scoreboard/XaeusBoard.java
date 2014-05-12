@@ -58,7 +58,7 @@ public class XaeusBoard {
 					addPlayer(online);
 				}
 			}
-		}.runTaskTimer(plugin, 40, 40);
+		}.runTaskTimer(plugin, 0, 120);
 		
 	}
 

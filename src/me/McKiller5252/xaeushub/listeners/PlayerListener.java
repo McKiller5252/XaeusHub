@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import me.McKiller5252.xaeushub.XaeusHub;
 import me.McKiller5252.xaeushub.tokens.TokenApi;
+import me.McKiller5252.xaeushub.util.Cooldowns;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -17,13 +18,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class PlayerListener implements Listener {
 	
 	int reward = 50;
+	int cooltime = 86400;
 	
 	@EventHandler 
 	public void onJoin(PlayerJoinEvent e){
 		final Player p = e.getPlayer();
-		if(p.hasPlayedBefore()){
+		if(Cooldowns.tryCooldown(p, "GiveTokens", cooltime)){
 			TokenApi.getManager().addTokens(p.getName(), reward);
 			p.sendMessage(ChatColor.GREEN + "You get " + ChatColor.RED + reward + ChatColor.GREEN  + " tokens for joining the server.");
+		}else{
+			p.sendMessage(ChatColor.RED + "Wait 24 hours before getting a daily reward: " + ChatColor.GOLD + reward + ChatColor.RED + " tokens.");
 		}
 		XaeusHub.getBar().showBarChanging(e.getPlayer());
 		XaeusHub.getBoard().updatescoreboardforeveryone();
@@ -49,7 +53,7 @@ public class PlayerListener implements Listener {
 			 ItemStack spawnItem = new ItemStack(Material.GHAST_TEAR);
 			 ItemMeta im =  spawnItem.getItemMeta();
 			 im.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Xaeus Hat Shop (Right Click)");
-			 im.setLore(Arrays.asList(ChatColor.AQUA + "Right click to open Hat Shop"));
+			 im.setLore(Arrays.asList(ChatColor.AQUA + "=^= Right click to open Hat Shop =^="));
 			 spawnItem.setItemMeta(im);
 			 p.getInventory().setItem(6, spawnItem);
 	    }

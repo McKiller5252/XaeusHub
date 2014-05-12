@@ -77,7 +77,6 @@ public class XaeusHub extends JavaPlugin implements Listener{
             public void run(){
                 System.out.println("[XaeusHub] Saving Tokens Config...");
                 saveConfig();
-                XaeusHub.getBoard().updatescoreboardforeveryone();
                 System.out.println("[XaeusHub] Saving Complete!");
             }
         }.runTaskTimer(XaeusHub.getPlugin(), 20*10, 20*60*5);
